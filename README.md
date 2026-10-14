@@ -18,6 +18,64 @@ npm start
 yarn start
 ```
 
+## Assessment Results App
+
+This demo stores user-entered assessments locally on the device. It includes no sample records, backend, or connected AI service. Feedback for completed assessments is entered manually.
+
+### Android setup
+
+Requirements: Node.js 22.11+, JDK 17, Android Studio with an emulator or USB-debugging-enabled Android device, and Android SDK Platform-Tools.
+
+Install packages from the project root:
+
+```sh
+npm install
+```
+
+Start Metro in one terminal:
+
+```sh
+npm start
+```
+
+In another terminal, confirm a device is available and launch the app:
+
+```sh
+adb devices
+npm run android
+```
+
+For a USB device, accept the USB debugging authorization prompt. If Metro cannot be reached over USB, run `adb reverse tcp:8081 tcp:8081`. Gradle's machine-specific SDK location is configured in `android/local.properties` and should not be committed.
+
+On macOS with Homebrew, if VS Code reports `spawnSync adb ENOENT`, add Android tools to `~/.zshrc` and fully restart VS Code:
+
+```sh
+export PATH="/opt/homebrew/bin:$HOME/Library/Android/sdk/platform-tools:$PATH"
+```
+
+Build an installable debug APK with:
+
+```sh
+cd android && ./gradlew assembleDebug
+```
+
+The APK is at `android/app/build/outputs/apk/debug/app-debug.apk`.
+
+### Assessment behavior
+
+- Completed assessments require a question/task, type, whole-number score from 0 to 100, and manually entered feedback.
+- Scores of 70 or above are classified as Good; scores below 70 are Needs Improvement.
+- Pending assessments save without score or feedback and display no performance classification.
+- Records persist on-device through AsyncStorage; there is no cloud sync.
+
+Run the checks from the project root:
+
+```sh
+npm test -- --runInBand
+npm run lint
+npx tsc --noEmit
+```
+
 ## Step 2: Build and run your app
 
 With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
@@ -70,8 +128,6 @@ Open `App.tsx` in your text editor of choice and make some changes. When you sav
 
 When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
 
 ## Congratulations! :tada:
 
@@ -79,8 +135,6 @@ You've successfully run and modified your React Native App. :partying_face:
 
 ### Now what?
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
 
 # Troubleshooting
 
@@ -90,8 +144,3 @@ If you're having issues getting the above steps to work, see the [Troubleshootin
 
 To learn more about React Native, take a look at the following resources:
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
